@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reservar cita — Belleza Styling</title>
+<meta name="description" content="Reserva tu cita en Belleza Styling, Porto Alegre. Elige día y horario disponible.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<header>
+  <nav>
+    <a href="index.html" class="logo"><span class="mark"></span> Belleza Styling</a>
+    <div class="nav-links">
+      <a href="index.html">Inicio</a>
+      <a href="servicios.html">Servicios</a>
+      <a href="opiniones.html">Opiniones</a>
+      <a href="ubicacion.html">Ubicación</a>
+    </div>
+    <a href="reservar.html" class="nav-cta">Reservar</a>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <span class="eyebrow">Reservar</span>
+    <h1>Elige tu horario</h1>
+    <p>Selecciona el día y la hora que mejor te acomode.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+
+    <div class="step active" id="step-1">
+      <div class="agenda-card">
+        <div class="agenda-days">
+          <button class="agenda-day active" data-day="Lun 21">
+            <span class="d-name">Lun</span><span class="d-num">21</span>
+          </button>
+          <button class="agenda-day" data-day="Mar 22">
+            <span class="d-name">Mar</span><span class="d-num">22</span>
+          </button>
+          <button class="agenda-day" data-day="Mié 23">
+            <span class="d-name">Mié</span><span class="d-num">23</span>
+          </button>
+          <button class="agenda-day" data-day="Jue 24">
+            <span class="d-name">Jue</span><span class="d-num">24</span>
+          </button>
+          <button class="agenda-day" data-day="Vie 25">
+            <span class="d-name">Vie</span><span class="d-num">25</span>
+          </button>
+        </div>
+        <div class="agenda-slots">
+          <button class="slot">09:00</button>
+          <button class="slot">10:00</button>
+          <button class="slot taken" disabled>11:00</button>
+          <button class="slot">13:00</button>
+          <button class="slot">14:30</button>
+          <button class="slot taken" disabled>16:00</button>
+          <button class="slot">17:00</button>
+          <button class="slot">18:30</button>
+        </div>
+        <p class="agenda-note">🔒 Vista de demostración — los horarios reales se sincronizarán con el sistema de reservas del salón.</p>
+        <div style="margin-top:26px; text-align:right;">
+          <button class="btn btn-primary" id="to-step-2" disabled>Continuar →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="step" id="step-2">
+      <div class="offer-card">
+        <span class="tag">Oferta especial</span>
+        <h3>10% off en tu primera visita</h3>
+        <p>Déjanos tu correo y te lo enviamos al instante. Totalmente opcional.</p>
+        <div class="offer-form">
+          <input type="text" placeholder="Tu nombre">
+          <input type="email" placeholder="Tu correo electrónico">
+        </div>
+        <button class="btn btn-primary" id="claim-offer" style="width:100%; justify-content:center;">Obtener 10% off y confirmar</button>
+        <a href="#" class="skip-link" id="skip-offer">Continuar sin la oferta →</a>
+      </div>
+    </div>
+
+    <div class="step" id="step-3">
+      <div class="confirm-card">
+        <div class="confirm-icon">✅</div>
+        <h3>¡Cita simulada con éxito!</h3>
+        <p>Esta es una vista de demostración — aún no se ha reservado nada de verdad.</p>
+        <div class="confirm-summary">
+          <div><b>Día:</b> <span id="summary-day">Lun 21</span></div>
+          <div><b>Hora:</b> <span id="summary-time">—</span></div>
+          <div><b>Servicio:</b> A definir con la clienta</div>
+        </div>
+        <a href="index.html" class="btn btn-ghost">Volver al inicio</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const dayButtons = document.querySelectorAll('.agenda-day');
+  const slotButtons = document.querySelectorAll('.slot:not(.taken)');
+  const toStep2 = document.getElementById('to-step-2');
+  let selectedDay = 'Lun 21';
+  let selectedTime = null;
+
+  dayButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      dayButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedDay = btn.dataset.day;
+    });
+  });
+
+  slotButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      slotButtons.forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedTime = btn.textContent;
+      toStep2.disabled = false;
+    });
+  });
+
+  function goToStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step-' + n).classList.add('active');
+    window.scrollTo({top: document.querySelector('.page-hero').offsetHeight, behavior:'smooth'});
+  }
+
+  toStep2.addEventListener('click', () => {
+    document.getElementById('summary-day').textContent = selectedDay;
+    document.getElementById('summary-time').textContent = selectedTime;
+    goToStep(2);
+  });
+
+  document.getElementById('claim-offer').addEventListener('click', (e) => {
+    e.preventDefault();
+    goToStep(3);
+  });
+
+  document.getElementById('skip-offer').addEventListener('click', (e) => {
+    e.preventDefault();
+    goToStep(3);
+  });
+</script>
+
+<footer>
+  <div class="wrap">Belleza Styling · Porto Alegre, RS — Página de demostración</div>
+</footer>
+</body>
+</html>
